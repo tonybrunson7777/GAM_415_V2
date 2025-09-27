@@ -38,6 +38,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<int> Triangles;
 
+	// variable to hold the procedural mesh component for UV0
+	UPROPERTY(EditAnywhere)
+	TArray<FVector2D> UV0;
+
+	// variable to hold the procedural mesh component for Material
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* PlaneMat;
+
 	// function to hold the procedural mesh component for Normals
 	UFUNCTION()
 	void CreateMesh();
