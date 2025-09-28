@@ -2,7 +2,11 @@
 
 #include "GAM_415_V2Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Components/SphereComponent.h"
+#include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 
 AGAM_415_V2Projectile::AGAM_415_V2Projectile() 
 {
@@ -16,8 +20,14 @@ AGAM_415_V2Projectile::AGAM_415_V2Projectile()
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
 
+	// Create the mesh component
+	ballMesh = CreateDefaultSubobject<UStaticMeshComponent>("Ball Mesh");
+   
 	// Set as root component
 	RootComponent = CollisionComp;
+
+	// Attach ballMesh to root component
+	ballMesh->SetupAttachment(RootComponent);
 
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
@@ -39,5 +49,28 @@ void AGAM_415_V2Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAct
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
 		Destroy();
+	}
+
+	// check to see if other actor is not null
+	if (OtherActor != nullptr)
+	{
+		// generate random numbers for decal color and frame
+		float ranNumX = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
+		float ranNumY = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
+		float ranNumZ = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);	
+		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
+
+		// create a random color using the random numbers generated
+		FVector4 randColor = FVector4(ranNumX, ranNumY, ranNumZ, 1.f);
+
+		// spawn decal at hit location and apply random color and frame to the decal material instance
+		auto Decal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), baseMat, FVector(UKismetMathLibrary::RandomFloatInRange(20.f, 40.f)), Hit.Location, Hit.Normal.Rotation(), 0.f);
+		auto MatInstance = Decal->CreateDynamicMaterialInstance();
+
+		// apply random color and frame to decal material instance
+		MatInstance->SetVectorParameterValue("Color", randColor);
+
+		// apply random frame to decal material instance
+		MatInstance->SetScalarParameterValue("Frame", frameNum);
 	}
 }
