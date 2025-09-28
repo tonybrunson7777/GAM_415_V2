@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "PerlinProcTerrain.h"
 
 
 AGAM_415_V2Projectile::AGAM_415_V2Projectile() 
@@ -96,5 +97,14 @@ void AGAM_415_V2Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAct
 
 		// apply random frame to decal material instance
 		MatInstance->SetScalarParameterValue("Frame", frameNum);
+		
+		// cast the other actor to a procedural terrain actor
+		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
+
+		// if the other actor is a procedural terrain, call the AlterMesh function to deform the terrain
+		if (procTerrain)
+		{
+			procTerrain->AlterMesh(Hit.ImpactPoint);
+		}
 	}
 }

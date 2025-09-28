@@ -19,7 +19,7 @@ public:
 	APerlinProcTerrain();
 	
 	// variable for XSize that is clamped to a minimum of 0
-	UPROPERTY(EditAnywhere, Meta = (ClampMin =0))
+	UPROPERTY(EditAnywhere, Meta = (ClampMin = 0))
 	int XSize = 0;
 
 	// variable for YSize that is clamped to a minimum of 0
