@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 
 AGAM_415_V2Projectile::AGAM_415_V2Projectile() 
@@ -69,6 +71,20 @@ void AGAM_415_V2Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAct
 	// check to see if other actor is not null
 	if (OtherActor != nullptr)
 	{	
+		if (colorP)
+		{
+			// spawn niagara particle system at hit location and apply random color to the particle system
+			UNiagaraComponent* particleComp = UNiagaraFunctionLibrary::SpawnSystemAttached(colorP, HitComp, NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::KeepRelativeOffset, true);
+
+			// apply random color to the particle system
+			particleComp->SetNiagaraVariableLinearColor(FString("RandomColor"), randColor);
+
+			// destroy the projectile
+			ballMesh->DestroyComponent();
+
+			// destroy the projectile actor after 0.1 seconds to allow time for the particle system to play
+			CollisionComp->BodyInstance.SetCollisionProfileName("NoCollision");
+		}
 		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
 
 		// spawn decal at hit location and apply random color and frame to the decal material instance

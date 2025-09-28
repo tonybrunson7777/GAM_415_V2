@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class UNiagaraSystem;
 
 UCLASS(config=Game)
 class AGAM_415_V2Projectile : public AActor
@@ -41,6 +42,10 @@ class AGAM_415_V2Projectile : public AActor
 	// variable for a dynamic material instance that can be applied to the decal material
 	UPROPERTY()
 	UMaterialInstanceDynamic* dmiMat;
+
+	// variable for a niagara particle system that can be applied to the class
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* colorP;
 
 public:
 	AGAM_415_V2Projectile();
