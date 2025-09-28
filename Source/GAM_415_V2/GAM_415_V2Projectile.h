@@ -30,9 +30,25 @@ class AGAM_415_V2Projectile : public AActor
 	UPROPERTY(EditAnywhere)
 	UMaterial* baseMat;
 
+	// variable for a random color that can be applied to the decal material instance
+	UPROPERTY()
+	FLinearColor randColor;
+
+	// variable for a decal material that can be applied to the class
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* projMat;
+
+	// variable for a dynamic material instance that can be applied to the decal material
+	UPROPERTY()
+	UMaterialInstanceDynamic* dmiMat;
+
 public:
 	AGAM_415_V2Projectile();
 
+protected:
+	virtual void BeginPlay();
+
+public:
 	/** called when projectile hits something */
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

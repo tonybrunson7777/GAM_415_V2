@@ -41,6 +41,21 @@ AGAM_415_V2Projectile::AGAM_415_V2Projectile()
 	InitialLifeSpan = 3.0f;
 }
 
+void AGAM_415_V2Projectile::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// generate a random color
+	randColor = FLinearColor(UKismetMathLibrary::RandomFloatInRange(0.f, 1.f), UKismetMathLibrary::RandomFloatInRange(0.f, 1.f), UKismetMathLibrary::RandomFloatInRange(0.f, 1.f), 1.f);
+
+	// create a dynamic material instance and apply it to the ball mesh
+	dmiMat = UMaterialInstanceDynamic::Create(projMat, this);
+	ballMesh->SetMaterial(0, dmiMat);
+
+	// apply the random color to the dynamic material instance
+	dmiMat->SetVectorParameterValue("ProjColor", randColor);
+}
+
 void AGAM_415_V2Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
@@ -53,15 +68,8 @@ void AGAM_415_V2Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAct
 
 	// check to see if other actor is not null
 	if (OtherActor != nullptr)
-	{
-		// generate random numbers for decal color and frame
-		float ranNumX = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
-		float ranNumY = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
-		float ranNumZ = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);	
+	{	
 		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
-
-		// create a random color using the random numbers generated
-		FVector4 randColor = FVector4(ranNumX, ranNumY, ranNumZ, 1.f);
 
 		// spawn decal at hit location and apply random color and frame to the decal material instance
 		auto Decal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), baseMat, FVector(UKismetMathLibrary::RandomFloatInRange(20.f, 40.f)), Hit.Location, Hit.Normal.Rotation(), 0.f);
