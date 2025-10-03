@@ -62,6 +62,7 @@ protected:
 	// End of APawn interface
 
 public:
+	// boolean to check if the player is teleporting
 	UPROPERTY(EditAnywhere)
 	bool isTeleporting;
 
