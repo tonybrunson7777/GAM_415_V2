@@ -20,12 +20,16 @@ APortal::APortal()
 	// create the capture component
 	sceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>("Capture");
 
+	// create the arrow component
+	rootArrow = CreateDefaultSubobject<UArrowComponent>("Root Arrow");
+
 	// set the box component as the root component
 	RootComponent = boxComp;
 
 	// attach the mesh to the root component
 	mesh->SetupAttachment(boxComp);
 	sceneCapture->SetupAttachment(mesh);
+	rootArrow->SetupAttachment(RootComponent);
 
 	// set the collision to ignore
 	mesh->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -55,6 +59,8 @@ void APortal::BeginPlay()
 void APortal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// call the update portals function
 	UpdatePortals();
 
 }
@@ -71,7 +77,7 @@ void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			if (!playerChar->isTeleporting)
 			{
 				playerChar->isTeleporting = true;
-				FVector loc = OtherPortal->GetActorLocation();
+				FVector loc = OtherPortal->rootArrow->GetComponentLocation();
 				playerChar->SetActorLocation(loc);
 
 				// set a timer to reset the isTeleporting variable after 1 second
@@ -105,7 +111,7 @@ void APortal::UpdatePortals()
    FRotator camRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetTransformComponent()->GetComponentRotation();
 
    // calculate the combined location 
-   FVector CombinedLocation = camLocation - Location;
+   FVector CombinedLocation = camLocation + Location;
 
    // set the scene capture location and rotation
    sceneCapture->SetWorldLocationAndRotation(CombinedLocation, camRotation);

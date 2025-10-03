@@ -7,9 +7,8 @@
 #include "Components/SceneCaptureComponent2D.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "Components/BoxComponent.h"
-#include "GAM_415_V2Character.h"
+#include "Components/ArrowComponent.h"
 #include "Portal.generated.h"
-
 
 class GAM_415_V2Character;
 
@@ -37,6 +36,10 @@ public:
 	// variable for the scene capture component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USceneCaptureComponent2D* sceneCapture;
+
+	// variable for the arrow component
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* rootArrow;
 
 	// variable for the render target
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
