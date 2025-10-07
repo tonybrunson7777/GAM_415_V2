@@ -9,6 +9,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "PerlinProcTerrain.h"
+#include "PerlinProcTerrain_V2.h"
 
 
 AGAM_415_V2Projectile::AGAM_415_V2Projectile() 
@@ -100,11 +101,18 @@ void AGAM_415_V2Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAct
 		
 		// cast the other actor to a procedural terrain actor
 		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
+		APerlinProcTerrain_V2* procTerrainV2 = Cast<APerlinProcTerrain_V2>(OtherActor);
 
 		// if the other actor is a procedural terrain, call the AlterMesh function to deform the terrain
 		if (procTerrain)
 		{
 			procTerrain->AlterMesh(Hit.ImpactPoint);
 		}
+
+		if (procTerrainV2)
+		{
+			procTerrainV2->AlterMesh(Hit.ImpactPoint);
+		}
+
 	}
 }
