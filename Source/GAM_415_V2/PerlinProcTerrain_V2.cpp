@@ -35,6 +35,7 @@ void APerlinProcTerrain_V2::Tick(float DeltaTime)
 
 }
 
+// Function to alter the mesh at the impact point
 void APerlinProcTerrain_V2::AlterMesh(FVector impactPoint)
 {
 	for (int i = 0; i < Vertices.Num(); i++)
@@ -49,6 +50,7 @@ void APerlinProcTerrain_V2::AlterMesh(FVector impactPoint)
 	}
 }
 
+// Function to create the vertices of the mesh
 void APerlinProcTerrain_V2::CreateVertices()
 {
 	for (int X = 0; X <= XSize; X++)
@@ -63,6 +65,7 @@ void APerlinProcTerrain_V2::CreateVertices()
 	}
 }
 
+// Function to create the triangles of the mesh
 void APerlinProcTerrain_V2::CreateTriangles()
 {
 	int Vertex = 0;
